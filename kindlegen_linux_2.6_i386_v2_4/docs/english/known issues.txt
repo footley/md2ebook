@@ -1,0 +1,3 @@
+﻿Known issues:
+   1. Linking SVG from TOC/NCX is not supported.
+   2. Nested <a> tags might not work properly.

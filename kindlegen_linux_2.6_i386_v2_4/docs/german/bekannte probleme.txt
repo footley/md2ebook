@@ -1,0 +1,3 @@
+﻿bekannte Probleme:
+   1. Das Verbinden des SVG von TOC/NCX wird nicht unterstützt.
+   2. Verschachtelte <a> Bezeichnungsschilder funktionieren möglicherweise nicht ordnungsgemäß.
