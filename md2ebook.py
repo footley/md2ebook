@@ -113,8 +113,7 @@ class Md2Ebook(object):
         (_, epub_name) = tempfile.mkstemp(suffix='.epub')
         (_, mobi_name) = tempfile.mkstemp(suffix='.mobi')
         (_, mobi_file) = os.path.split(mobi_name)
-        print epub_name
-        print mobi_name
+        
         try:
             with open(epub_name, 'w') as _file:
                 _file.write(self.epub)
@@ -180,8 +179,6 @@ def main():
             root, ext = splitext(path)
             if args.output:
                 root = join(args.output, split(splitext(path)[0])[1])
-            
-            print root
             
             # save html
             if args.html:
