@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
 
 from markdown2 import markdown
 from xhtml2pdf import pisa
@@ -23,9 +24,9 @@ def correct_html(title, body):
         return boilerplate
     return get_boilerplate().format(title = title, body = body)
 
-def slugify(str):
-    str = unidecode.unidecode(str).lower()
-    return re.sub(r'\W+','-',str)
+def slugify(_str):
+    _str = unidecode.unidecode(_str).lower()
+    return re.sub(r'\W+', '-', _str)
 
 class Chapter(object):
     def __init__(self, title, html):
