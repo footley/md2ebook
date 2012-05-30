@@ -8,6 +8,7 @@ Makes some assumptions:
 * Each Chapter starts with an h2 element.
 * The authors name is the first h3
 * If only one Chapter is present no Table of Contents is generated.
+
 Therefore valid markdown must contain at least one h1, h2 and h3.
 
 Simple Example (note the newlines between paragraphs)
@@ -42,9 +43,10 @@ It was one January morning, very early-a pinching, frosty morning-the cove all g
 Command Line Usage
 ------------------
 
-usage: md2ebook.py \[\-h\] \[\-\-covers \[COVERS \[COVERS \.\.\.\]\]\] \[\-\-output OUTPUT\]
-                   \[\-html\] \[\-pdf\] \[\-epub\] \[\-mobi\] \[\-prc\]
-                   files \[files \.\.\.\]
+```
+usage: md2ebook.py [-h] [--covers [COVERS [COVERS ...]]] [--output OUTPUT]
+                   [-html] [-pdf] [-epub] [-mobi] [-prc]
+                   files [files ...]
 
 Convert provided markdown to html, pdf, epub and mobi
 
@@ -52,17 +54,18 @@ positional arguments:
   files                 list the markdown files to be converted
 
 optional arguments:
-  \-h, \-\-help            show this help message and exit
-  \-\-covers \[COVERS \[COVERS \.\.\.\]]\, \-c \[COVERS \[COVERS \.\.\.\]\]
+  -h, --help            show this help message and exit
+  --covers [COVERS [COVERS ...]], -c [COVERS [COVERS ...]]
                         provide the paths for the covers to be used
-  \-\-output OUTPUT, \-o OUTPUT
+  --output OUTPUT, -o OUTPUT
                         output directory, if different from input files
                         directory
-  \-html                 suppress convertion to html
-  \-pdf                  suppress convertion to pdf
-  \-epub                 suppress convertion to epub
-  \-mobi                 suppress convertion to mobi
-  \-prc                  suppress convertion to prc
+  -html                 suppress convertion to html
+  -pdf                  suppress convertion to pdf
+  -epub                 suppress convertion to epub
+  -mobi                 suppress convertion to mobi
+  -prc                  suppress convertion to prc
+```
 
 Usage as Python Library
 -----------------------
