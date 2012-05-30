@@ -1,3 +1,0 @@
-﻿problèmes connus:
-   1. les liens de SVG à TOC/NCX ne sont pas supportés.
-   2. l'étiquette <a> pourrait ne pas marcher correctement.

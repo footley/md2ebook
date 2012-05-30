@@ -1,3 +1,0 @@
-﻿problemas conocidos:
-   1. liar SVG a TOC/NCX no se suporta.
-   2. encajar la etiqueta <a> no podria funccionar correctamente.

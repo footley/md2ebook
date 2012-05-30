@@ -1,3 +1,0 @@
-﻿problemi noti:
-   1. Collegamento SVG da TOC/NCX non è supportato.
-   2. nidificato <a> i tags non potrebbero funzionare correttamente.

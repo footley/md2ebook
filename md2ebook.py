@@ -19,7 +19,8 @@ def correct_html(title, body):
         global boilerplate
         if boilerplate:
             return boilerplate
-        with open('templates/html-boilerplate.html') as _file:
+        path = os.path.join(os.path.split(__file__)[0], "templates/html-boilerplate.html")
+        with open(path) as _file:
             boilerplate = _file.read()
         return boilerplate
     return get_boilerplate().format(title = title, body = body)
