@@ -3,7 +3,19 @@ md2ebook.py
 
 Converts a simple markdown document into the main ebook formats (epub, mobi\prc, html and pdf).
 
-Makes some assumptions:
+Prerequisits
+------------
+
+```
+easy_install markdown2
+easy_install xhtml2pdf
+easy_install epubbuilder
+easy_install bs4
+```
+
+Assumptions
+-----------
+
 * The title of the book is the first h1 element.
 * Each Chapter starts with an h2 element.
 * The authors name is the first h3
@@ -67,7 +79,3 @@ optional arguments:
   -prc                  suppress convertion to prc
 ```
 
-Usage as Python Library
------------------------
-
-todo
