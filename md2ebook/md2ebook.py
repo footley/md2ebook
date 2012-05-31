@@ -165,7 +165,16 @@ class Md2Ebook(object):
         Converts html to pdf and returns the char stream
         """
         result = StringIO()
-        pisa.pisaDocument(StringIO(self.html.encode("UTF-8")), result)
+        # h3 and down shouldn't make chapters
+        html = self.html.encode("UTF-8")
+        html = html.replace('<h3>', '<h3 class="not_outline">')
+        html = html.replace('<h4>', '<h4 class="not_outline">')
+        html = html.replace('<h5>', '<h5 class="not_outline">')
+        html = html.replace('<h6>', '<h6 class="not_outline">')
+        # add page breaks before each h2
+        html = html.replace('<h2>', '<h2 class="break">')
+        # generate the pdf
+        pisa.pisaDocument(StringIO(html), result)
         return result.getvalue()
     
     @LazyProperty
