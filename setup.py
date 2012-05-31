@@ -21,7 +21,7 @@ def parse_requirements(file_name):
                 requirements.append(line)
     
     return requirements
-    
+
 def parse_dependency_links(file_name):
     """
     retrives the dependancies in the form of 

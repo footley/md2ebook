@@ -3,14 +3,11 @@ md2ebook.py
 
 Converts a simple markdown document into the main ebook formats (epub, mobi\prc, html and pdf).
 
-Prerequisits
+Installation
 ------------
 
 ```
-easy_install markdown2
-easy_install xhtml2pdf
-easy_install epubbuilder
-easy_install bs4
+pip install git+git://github.com/footley/md2ebook.git#egg=md2ebook
 ```
 
 Assumptions
