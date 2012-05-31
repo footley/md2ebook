@@ -207,8 +207,9 @@ class Md2Ebook(object):
             with open(epub_name, 'w') as _file:
                 _file.write(self.epub)
             
-            subprocess.call(['kindlegen_linux_2.6_i386_v2_4/kindlegen', 
-                epub_name, '-c1', '-o', mobi_file])
+            kindlegen_path = os.path.join(os.path.split(__file__)[0], 
+                'kindlegen_linux_2.6_i386_v2_4/kindlegen')
+            subprocess.call([kindlegen_path, epub_name, '-c1', '-o', mobi_file])
             with open(mobi_name) as _file:
                 return _file.read()
         finally:
