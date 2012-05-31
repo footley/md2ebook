@@ -1,5 +1,5 @@
 # test output
-md2ebook/test-files/output
+test/test-files/correct_output
 
 # gedit backup files
 *~
