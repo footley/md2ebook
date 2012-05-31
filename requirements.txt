@@ -1,5 +1,5 @@
 markdown2==1.4.2
 git://github.com/chrisglass/xhtml2pdf.git#egg=xhtml2pdf
-https://github.com/footley/epubbuilder/tarball/master#egg=epubbuilder
+https://github.com/footley/epubbuilder/tarball/master#egg=epubbuilder-1.0
 beautifulsoup4==4.0.5
 unidecode
