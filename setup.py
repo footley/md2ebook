@@ -40,7 +40,7 @@ with open('README.md') as _file:
     long_desc = _file.read()
 
 setup(name='md2ebook',
-      version='1.0',
+      version='0.1',
       description='Convert markdown to the popular ebook formats in a simple way',
       long_description = long_desc,
       author='Jonathan Butcher',
