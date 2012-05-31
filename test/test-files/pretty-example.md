@@ -25,7 +25,8 @@ if you like, and they will still flow correctly.
 
 > This is a block quote, its a handy way to make a piece of text more 
 > prominent in your story. I love them dearly. Lets add some more text to 
-> this to make it a little longer. **Note that these don't work on the kindle.**
+> this to make it a little longer. **Note that these don't work on the kindle 
+> (they just appear as normal paragraphs).**
 
 > > Then we might have a nested block quote! Wow, this bad boy is steaming hot
 > > its almost as if we were playing with fire!!
@@ -61,10 +62,12 @@ would use these, never the less they are available!
         is preserved 
     here.
     
-You can also put text in nice little "code" blocks like this: use the `force 
-you` smeg head. Really you already know how. **Note that on calibres mobi 
-reader, these mess up, on the kindle itself they are fine. 
+**Note that on calibres mobi reader, these mess up (they cause all subsequent 
+test to be indented at the same level), on the kindle itself they are fine. 
 Also on calibres epub reader they are fine**
+    
+You can also put text in nice little "code" blocks like this: use the `force 
+you` smeg head, really you already know how. 
 
 Now the Second Chapitre!
 ------------------------
