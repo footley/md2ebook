@@ -23,6 +23,7 @@ from bs4 import BeautifulSoup
 
 import os
 import re
+import codecs
 import tempfile
 import unidecode
 import subprocess
@@ -55,7 +56,8 @@ class HTMLWrapper(object):
         path = os.path.join(
             os.path.split(__file__)[0], "templates/html-boilerplate.html")
         with open(path) as _file:
-            return _file.read()
+            boilerplate = _file.read()
+        return boilerplate.decode('utf-8')
     
     def wrap_html(self, title, body):
         """
@@ -87,7 +89,10 @@ class HtmlParser(object):
     chapters
     """
     def __init__(self, html):
-        self.soup = BeautifulSoup(html)
+        # remove the xml declaration before sending to soup as for some 
+        # reason it breaks things
+        self.soup = BeautifulSoup(
+            html.replace('<?xml version="1.0" encoding="UTF-8"?>', ''))
     
     def get_title(self):
         """
@@ -263,7 +268,7 @@ def main():
             
             # save html
             if args.html:
-                with open(root+'.html', 'w') as html:
+                with codecs.open(root+'.html', 'w', 'utf-8') as html:
                     html.write(conv.html)
             # save pdf
             if args.pdf:

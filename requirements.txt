@@ -1,5 +1,5 @@
 markdown2==1.4.2
 git://github.com/chrisglass/xhtml2pdf.git#egg=xhtml2pdf
 epubbuilder
-beautifulsoup4==4.0.5
+beautifulsoup4==4.1.0
 unidecode
