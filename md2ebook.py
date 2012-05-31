@@ -1,6 +1,20 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+"""
+Converts a simple markdown document into the main ebook formats: 
+    epub, mobi\prc, html and pdf.
+
+Assumptions:
+
+* The title of the book is the first h1 element.
+* Each Chapter starts with an h2 element.
+* The authors name is the first h3
+* If only one Chapter is present no Table of Contents is generated.
+
+Therefore valid markdown must contain at least one h1, h2 and h3.
+"""
+
 from markdown2 import markdown
 from xhtml2pdf import pisa
 from StringIO import StringIO
@@ -13,77 +27,147 @@ import tempfile
 import unidecode
 import subprocess
 
-boilerplate = None
-def correct_html(title, body):
-    def get_boilerplate():
-        global boilerplate
-        if boilerplate:
-            return boilerplate
-        path = os.path.join(os.path.split(__file__)[0], "templates/html-boilerplate.html")
+class LazyProperty(object):
+    """
+    automagically makes a function lazy loading and behave like an attribute
+    """
+    def __init__(self, func):
+        self._func = func
+        self.__name__ = func.__name__
+        self.__doc__ = func.__doc__
+
+    def __get__(self, obj, klass=None):
+        if obj is None: 
+            raise ValueError("""LazyProperty decorator should only be used 
+on class methods with no arguments""")
+        result = obj.__dict__[self.__name__] = self._func(obj)
+        return result
+
+class HTMLWrapper(object):
+    """
+    Wraps provided html in boilerplate
+    """
+    @LazyProperty
+    def boilerplate(self):
+        """
+        retrieves the correct boilerplate
+        """
+        path = os.path.join(
+            os.path.split(__file__)[0], "templates/html-boilerplate.html")
         with open(path) as _file:
-            boilerplate = _file.read()
-        return boilerplate
-    return get_boilerplate().format(title = title, body = body)
+            return _file.read()
+    
+    def wrap_html(self, title, body):
+        """
+        wraps the provided html fragment in the correct boilerplate
+        """
+        return self.boilerplate.format(title = title, body = body)
+        
+HTMLWRAP = HTMLWrapper()
 
 def slugify(_str):
+    """
+    turns any string into a valid url/filename slug
+    """
     _str = unidecode.unidecode(_str).lower()
     return re.sub(r'\W+', '-', _str)
 
 class Chapter(object):
+    """
+    Represents a chapter
+    """
     def __init__(self, title, html):
         self.title = title
         self.slug = slugify(title)
-        self.html = correct_html(title, html)
+        self.html = HTMLWRAP.wrap_html(title, html)
 
 class HtmlParser(object):
+    """
+    Parses the provided HTML to give easy access to the title, author and 
+    chapters
+    """
     def __init__(self, html):
         self.soup = BeautifulSoup(html)
     
     def get_title(self):
+        """
+        Retrieves the title from the provided html.
+        That is to say the contents of the first h1
+        """
         title = self.soup.find('h1')
         if not title:
             raise ValueError('Could not find title in provided html')
         return title.string
     
     def get_author(self):
+        """
+        Retrieves the author from the provided html.
+        That is to say the contents of the first h3
+        """
         author = self.soup.find('h3')
         if not author:
             raise ValueError('Could not find author in provided html')
         return author.string
     
     def get_chapters(self):
+        """
+        Retrieves the author from the provided html.
+        That is to say the contents of the first h3
+        """
         chapters = []
         chapter_titles = self.soup.find_all('h2')
         for title in chapter_titles:
             html = title.prettify()
-            next = title.next_sibling
-            while next and (not hasattr(next, 'name') or next.name != 'h2'):
+            next_sib = title.next_sibling
+            while next_sib and \
+                    (not hasattr(next_sib, 'name') or next_sib.name != 'h2'):
                 try:
-                    html = html + next.prettify()
+                    html = html + next_sib.prettify()
                 except AttributeError:
-                    html = html + next.string
-                next = next.next_sibling
+                    html = html + next_sib.string
+                next_sib = next_sib.next_sibling
             chapters.append(Chapter(title.string, html))
         
         return chapters
 
 class Md2Ebook(object):
-    def __init__(self, md, cover=None):
-        self.md = md
+    """
+    Converts from markdown to a variety of ebook formats: 
+        html, pdf, epub and mobi
+    Usage:
+        >>> book = Md2Ebook(md_content)
+        >>> open(path, 'w').write(book.html)
+        >>> open(path, 'w').write(book.pdf)
+        ...
+    """
+    def __init__(self, md_content, cover=None):
+        self.markdown = md_content
         self.cover = cover
         self.parser = HtmlParser(self.html)
     
-    def _generate_html(self):
-        html = markdown(self.md)
+    @LazyProperty
+    def html(self):
+        """
+        Converts markdown to html and returns the char stream
+        """
+        html = markdown(self.markdown)
         parser = HtmlParser(html)
-        return correct_html(parser.get_title(), html)
+        return HTMLWRAP.wrap_html(parser.get_title(), html)
     
-    def _generate_pdf(self):
+    @LazyProperty
+    def pdf(self):
+        """
+        Converts html to pdf and returns the char stream
+        """
         result = StringIO()
         pisa.pisaDocument(StringIO(self.html.encode("UTF-8")), result)
         return result.getvalue()
     
-    def _generate_epub(self):
+    @LazyProperty
+    def epub(self):
+        """
+        Converts html to epub and returns the char stream
+        """
         book = EpubBook()
         book.set_title(self.parser.get_title())
         book.add_creator(self.parser.get_author())
@@ -109,7 +193,11 @@ class Md2Ebook(object):
         book.create_book(stream)
         return stream.getvalue()
     
-    def _generate_mobi(self):
+    @LazyProperty
+    def mobi(self):
+        """
+        Converts epub to mobi and returns the char stream
+        """
         # save epub to temp file
         (_, epub_name) = tempfile.mkstemp(suffix='.epub')
         (_, mobi_name) = tempfile.mkstemp(suffix='.mobi')
@@ -119,34 +207,26 @@ class Md2Ebook(object):
             with open(epub_name, 'w') as _file:
                 _file.write(self.epub)
             
-            subprocess.call(['kindlegen_linux_2.6_i386_v2_4/kindlegen', epub_name, '-c1', '-o', mobi_file])
+            subprocess.call(['kindlegen_linux_2.6_i386_v2_4/kindlegen', 
+                epub_name, '-c1', '-o', mobi_file])
             with open(mobi_name) as _file:
                 return _file.read()
         finally:
             os.remove(epub_name)
             os.remove(mobi_name)
-    
-    def __getattr__(self, name):
-        if name == "html":
-            self.html = self._generate_html()
-            return self.html
-        elif name == "pdf":
-            self.pdf = self._generate_pdf()
-            return self.pdf
-        elif name == "epub":
-            self.epub = self._generate_epub()
-            return self.epub
-        elif name == "mobi":
-            self.mobi = self._generate_mobi()
-            return self.mobi
-        else:
-            raise AttributeError
 
 
 from argparse import ArgumentParser
 from os.path import splitext, split, join
 def main():
+    """
+    Treat the command line options
+    """
     def get_cover(covers, idx):
+        """
+        retrieve the cover at the same index as the book to convert, 
+        if no cover at said index return None
+        """
         if len(covers) == 0 or len(covers) <= idx:
             return None
         else:
@@ -174,10 +254,9 @@ def main():
     args = parser.parse_args()
     
     for idx, path in enumerate(args.files):
-        with open(path) as f:
-            md = f.read()
-            conv = Md2Ebook(md, get_cover(args.covers, idx))
-            root, ext = splitext(path)
+        with open(path) as _file:
+            conv = Md2Ebook(_file.read(), get_cover(args.covers, idx))
+            root, _ = splitext(path)
             if args.output:
                 root = join(args.output, split(splitext(path)[0])[1])
             

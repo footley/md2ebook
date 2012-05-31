@@ -1,0 +1,4 @@
+markdown2==1.4.2
+xhtml2pdf==3.0.33
+git://github.com/footley/epubbuilder.git#egg=epubbuilder
+bs4==4.0.5
