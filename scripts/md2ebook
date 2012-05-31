@@ -1,5 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-import md2ebook
-md2ebook.main()
+from md2ebook.md2ebook import main
+main()
