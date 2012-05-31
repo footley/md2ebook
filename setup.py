@@ -50,14 +50,11 @@ setup(name='md2ebook',
       dependency_links=parse_dependency_links('requirements.txt'),
       scripts=['scripts/md2ebook'],
       packages=['md2ebook'],
-      package_dir={'': ''},
-      package_data={'templates': [
-                         'html-boilerplate.html', 
-                         ],
-                    'kindlegen_linux_2.6_i386_v2_4': [
-                         'EULA.txt',
-                         'kindlegen',
-                         'KindleGen Legal Notices 2009-11-10 Linux.txt',
+      package_data={'md2ebook': [
+                         'templates/html-boilerplate.html', 
+                         'kindlegen_linux_2.6_i386_v2_4/EULA.txt',
+                         'kindlegen_linux_2.6_i386_v2_4/kindlegen',
+                         'kindlegen_linux_2.6_i386_v2_4/KindleGen Legal Notices 2009-11-10 Linux.txt',
                         ],
                    },
       )
