@@ -49,6 +49,8 @@ It was not very long after this that there occurred the first of the mysterious 
 It was one January morning, very early-a pinching, frosty morning-the cove all grey with hoar-frost, the ripple lapping softly on the stones, the sun still low and only touching the hilltops and shining far to seaward. The captain had risen earlier than usual and set out down the beach, his cutlass swinging under the broad skirts of the old blue coat, his brass telescope under his arm, his hat tilted back upon his head. I remember his breath hanging like smoke in his wake as he strode off, and the last sound I heard of him as he turned the big rock was a loud snort of indignation, as though his mind was still running upon Dr. Livesey.
 ```
 
+have a look at `md2ebook/test/test-files/pretty-example.md` for a more complete example.
+
 Command Line Usage
 ------------------
 
