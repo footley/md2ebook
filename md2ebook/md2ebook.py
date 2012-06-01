@@ -1,7 +1,5 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
-123 = foo
-
 """
 Converts a simple markdown document into the main ebook formats: 
     epub, mobi\prc, html and pdf.
@@ -29,6 +27,7 @@ import tempfile
 import unidecode
 import subprocess
 
+# pylint: disable=R0201
 class LazyProperty(object):
     """
     automagically makes a function lazy loading and behave like an attribute
@@ -224,7 +223,10 @@ class Md2Ebook(object):
             
             kindlegen_path = os.path.join(os.path.split(__file__)[0], 
                 'kindlegen_linux_2.6_i386_v2_4/kindlegen')
-            subprocess.call([kindlegen_path, epub_name, '-c1', '-o', mobi_file])
+            with open(os.devnull) as fnull:
+                subprocess.call(
+                    [kindlegen_path, epub_name, '-c1', '-o', mobi_file],
+                    stdout = fnull, stderr = fnull)
             with open(mobi_name) as _file:
                 return _file.read()
         finally:

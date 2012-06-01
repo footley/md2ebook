@@ -38,6 +38,9 @@ class TestHTML(unittest.TestCase):
         self.assertTrue(filecmp.cmp(temp_path, correct_path))
         
         os.remove(temp_path)
+        
+def main():
+    return unittest.main()
 
 if __name__ == '__main__':
-    unittest.main()
+    main()
