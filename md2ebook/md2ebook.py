@@ -65,14 +65,23 @@ class HTMLWrapper(object):
         """
         return self.boilerplate.format(title = title, body = body)
         
+class Slugger(object):
+    def __init__(self):
+        self.slugs = {}
+        
+    def slugify(self, _str):
+        """
+        turns any string into a valid unique url/filename slug
+        """
+        slug = unidecode.unidecode(_str).lower()
+        slug = re.sub(r'\W+', '-', slug)
+        while slug in self.slugs:
+            slug = slug + '-'
+        self.slugs[slug] = True
+        return slug
+        
 HTMLWRAP = HTMLWrapper()
-
-def slugify(_str):
-    """
-    turns any string into a valid url/filename slug
-    """
-    _str = unidecode.unidecode(_str).lower()
-    return re.sub(r'\W+', '-', _str)
+SLUGGER = Slugger()
 
 class Chapter(object):
     """
@@ -80,7 +89,7 @@ class Chapter(object):
     """
     def __init__(self, title, html):
         self.title = title
-        self.slug = slugify(title)
+        self.slug = SLUGGER.slugify(title)
         self.html = HTMLWRAP.wrap_html(title, html)
 
 class HtmlParser(object):
@@ -149,6 +158,7 @@ class Md2Ebook(object):
         self.markdown = md_content
         self.cover = cover
         self.parser = HtmlParser(self.html)
+        self._epub = None
     
     @LazyProperty
     def html(self):
@@ -182,29 +192,29 @@ class Md2Ebook(object):
         """
         Converts html to epub and returns the char stream
         """
-        book = EpubBook()
-        book.set_title(self.parser.get_title())
-        book.add_creator(self.parser.get_author())
+        self._epub = EpubBook()
+        self._epub.set_title(self.parser.get_title())
+        self._epub.add_creator(self.parser.get_author())
         
         chapters = self.parser.get_chapters()
-        book.add_title_page()
+        self._epub.add_title_page()
         
         if len(chapters) > 1:
-            book.add_toc_page()
+            self._epub.add_toc_page()
         
         if self.cover:
-            book.add_cover(self.cover)
+            self._epub.add_cover(self.cover)
         
         # add chapters
         for chapter in chapters:
-            item = book.add_html('{0}.html'.format(chapter.slug), chapter.html)
-            book.add_spine_item(item)
+            item = self._epub.add_html('{0}.html'.format(chapter.slug), chapter.html)
+            self._epub.add_spine_item(item)
             
             if len(chapters) > 1:
-                book.add_toc_map_node(item.dest_path, chapter.title)
+                self._epub.add_toc_map_node(item.dest_path, chapter.title)
         
         stream = StringIO()
-        book.create_book(stream)
+        self._epub.create_book(stream)
         return stream.getvalue()
     
     @LazyProperty

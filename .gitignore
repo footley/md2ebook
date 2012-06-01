@@ -1,6 +1,3 @@
-# test output
-test/test-files/correct_output
-
 # gedit backup files
 *~
 
@@ -38,3 +35,6 @@ nosetests.xml
 
 # Mr Developer
 .mr.developer.cfg
+
+# Profiling Output
+profile_out
