@@ -1,6 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 123 = foo
+
 """
 Converts a simple markdown document into the main ebook formats: 
     epub, mobi\prc, html and pdf.
